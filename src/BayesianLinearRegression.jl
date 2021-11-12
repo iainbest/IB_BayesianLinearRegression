@@ -37,7 +37,7 @@ Computes mean and covariance matrix of the posterior distribution.
 
 ### Arguments
 
-- `Φ::Matrix{Float64}`: Design matrix
+- `Φ::Matrix{Float64}`: Design matrix (N*M)
 - `y::Vector{Float64}`: length(N). Target variable (you want to predict?)
 - `α::Float64`: hyperparameter for precision of weights (before we see data, assume weights must be around zero with precision α)
 - `β::Float64`: hyperparameter for noise precision of data
