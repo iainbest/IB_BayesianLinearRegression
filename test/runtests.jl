@@ -1,4 +1,5 @@
 using IB_BayesianLinearRegression
+using LinearAlgebra
 using Test
 
 @testset "IB_BayesianLinearRegression.jl" begin
