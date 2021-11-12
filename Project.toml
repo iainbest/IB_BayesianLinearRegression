@@ -3,6 +3,9 @@ uuid = "f00dde58-4307-4305-bfdb-d1719a98f976"
 authors = ["Iain Best <iain.best@hotmail.com> and contributors"]
 version = "0.1.0"
 
+[deps]
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+
 [compat]
 julia = "1"
 
