@@ -105,30 +105,43 @@ From some initial guess for α and β, perform some number of iterations, at eac
 Follows approach in 'Pattern Recognition and Machine Learning, Bishop, 2006, pg168'.
 """
 function evidence_approximation(Φ,y,init_α,init_β,num_iterations)
+
+    # calculate eigenvalues to be multiplied by beta
     λ_s = get_λ_s(Φ)
 
+    # initialize some lists for alpha and beta
     alpha_list = fill(-1.0,num_iterations+1)
     beta_list = fill(-1.0,num_iterations+1)
 
+    # set initial values for alpha and beta in lists
     alpha_list[1] = init_α
     beta_list[1] = init_β
 
+    # set initial values for alpha and beta
     alpha = init_α
     beta = init_β
 
     for i in 1:num_iterations
+        # multiply by beta to get correct eigenvalues
         λ_is = beta * λ_s
+
+        # calculate gamma
         gamma = γ(alpha,λ_is)
+        
+        # calculate mean of posterior distribution
         mN, SN, SN_inv = posterior(Φ, y, alpha, beta) # reuse previous function to compute posterior
         
+        # update implicit alpha and beta
         alpha = α(gamma,mN)
         beta = 1.0/(inv_β(gamma,y,mN,Φ))
         
+        # append to lists
         alpha_list[i+1] = alpha
         beta_list[i+1] = beta
         
     end
 
+    # show final guesses for alpha, beta
     @show alpha_list[end]
     @show beta_list[end]
 
