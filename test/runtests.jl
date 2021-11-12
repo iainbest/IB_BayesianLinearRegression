@@ -5,7 +5,7 @@ using Test
     # Write your tests here.
 
     # BayesianLinearRegression.jl tests
-    @test tr(posterior(ones(N,M),ones(N),1.0,1.0)[3]) == [11.0 10.0;10.0 11.0]
+    @test tr(posterior(ones(10,2),ones(10),1.0,1.0)[3]) == [11.0 10.0;10.0 11.0]
 
     # EvidenceApproximation.jl tests
 
