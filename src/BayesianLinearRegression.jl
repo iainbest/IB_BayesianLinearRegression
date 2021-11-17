@@ -1,6 +1,6 @@
 # module BayesianLinearRegression
 
-export design_matrix, posterior, posterior_predictive
+export design_matrix, posterior, posterior_predictive, design_matrix2
 
 # using IPFitting, ACE, JuLIP
 # using LinearAlgebra
@@ -19,7 +19,7 @@ Note that we don't extract individual basis functions, but instead get basis eva
 by calling energy(basis,at), with B the basis and at is the configuration - this returns a vector of observations, i.e. a row 
 in our design matrix.
 """
-function design_matrix(cfgs::Vector{Dat},basis::RPIBasis)
+function design_matrix(cfgs,basis)
     # initialize matrix of correct size
     Φ = Matrix{Float64}(undef, length(cfgs), length(basis))
     # for ACE potential, evaluate basis functions for each config/atoms object
@@ -35,10 +35,10 @@ end
 If configs are just atoms objects -> use this form (not Dats?)
 
     """
-function design_matrix(cfgs::Vector{Atoms{Float64}},basis::RPIBasis)
+function design_matrix2(cfgs_atoms,basis)
     
-    d_matrix = Matrix{Float64}(undef, length(cfgs), length(basis))
-    for (count,i) in enumerate(cfgs)
+    d_matrix = Matrix{Float64}(undef, length(cfgs_atoms), length(basis))
+    for (count,i) in enumerate(cfgs_atoms)
         d_matrix[count,:] = energy(basis, i)
     end
     return d_matrix
