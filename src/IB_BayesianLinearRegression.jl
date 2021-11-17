@@ -1,6 +1,7 @@
 module IB_BayesianLinearRegression
 
 using LinearAlgebra
+using IPFitting, ACE, JuLIP
 
 # Write your package code here.
 
