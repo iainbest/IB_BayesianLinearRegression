@@ -19,7 +19,7 @@ Note that we don't extract individual basis functions, but instead get basis eva
 by calling energy(basis,at), with B the basis and at is the configuration - this returns a vector of observations, i.e. a row 
 in our design matrix.
 """
-function design_matrix(cfgs,basis)
+function design_matrix(cfgs::Vector{Dat},basis::RPIBasis)
     # initialize matrix of correct size
     Φ = Matrix{Float64}(undef, length(cfgs), length(basis))
     # for ACE potential, evaluate basis functions for each config/atoms object
@@ -35,13 +35,14 @@ end
 If configs are just atoms objects -> use this form (not Dats?)
 
     """
-function design_matrix2(cfgs_atoms,basis)
-    
-    d_matrix = Matrix{Float64}(undef, length(cfgs_atoms), length(basis))
+function design_matrix(cfgs_atoms::Vector{Atoms{Float64}},basis::RPIBasis)
+    # initialize matrix of correct size
+    Φ = Matrix{Float64}(undef, length(cfgs_atoms), length(basis))
+    # for ACE potential, evaluate basis functions for each config/atoms object
     for (count,i) in enumerate(cfgs_atoms)
-        d_matrix[count,:] = energy(basis, i)
+        Φ[count,:] = energy(basis, i)
     end
-    return d_matrix
+    return Φ
 end
 
 
@@ -86,7 +87,7 @@ function posterior_predictive(Φ_test, m_N, S_N, β)
     y = Φ_test * m_N
     # Only compute variances (diagonal elements of covariance matrix)
 #     y_epi = sum(Φ_test * S_N * Φ_test)
-    y_epi = sum(sum.((Φ_test * S_N) .* Φ_test),dims=2)[:,1]
+    y_epi = sum((Φ_test * S_N) .* Φ_test,dims=2)[:,1]
     y_var = 1/β .+ y_epi
     return y, y_epi, y_var
 end
