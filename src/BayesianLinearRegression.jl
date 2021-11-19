@@ -45,6 +45,22 @@ function design_matrix(cfgs_atoms::Vector{Atoms{Float64}},basis::JuLIP.MLIPs.IPS
     return Φ
 end
 
+"""
+    design_matrix(cfgs,basis)
+
+If configs are just atoms objects -> use this form (not Dats?)
+
+    """
+function design_matrix(cfgs_atoms::Vector{Atoms{Float64}},basis::RPIBasis)
+    # initialize matrix of correct size
+    Φ = Matrix{Float64}(undef, length(cfgs_atoms), length(basis))
+    # for ACE potential, evaluate basis functions for each config/atoms object
+    for (count,i) in enumerate(cfgs_atoms)
+        Φ[count,:] = energy(basis, i)
+    end
+    return Φ
+end
+
 
 """
     posterior(Φ, y, α, β)
