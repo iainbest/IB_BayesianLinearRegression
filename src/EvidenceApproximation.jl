@@ -142,8 +142,8 @@ function evidence_approximation(Φ,y,init_α,init_β,num_iterations)
     end
 
     # show final guesses for alpha, beta
-    @show alpha_list[end]
-    @show beta_list[end]
+    # @show alpha_list[end]
+    # @show beta_list[end]
 
     return alpha_list,beta_list
 end

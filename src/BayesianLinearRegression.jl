@@ -13,13 +13,37 @@ Computes N*M design matrix given N atomic configurations (observations) and leng
 ### Arguments
 
 - `cfgs::Vector{Dat}`: atomic configs from database with DFT energies, forces, virials 
-- `basis::RPIBasis`: type specific for ACE potential. Basis functions.
+- `basis::JuLIP.MLIPs.IPSuperBasis{JuLIP.MLIPs.IPBasis}`: Super basis type from JuLIP. Basis functions (pair and site energies included).
 
 Note that we don't extract individual basis functions, but instead get basis evaluated on specific configuration/atoms object 
 by calling energy(basis,at), with B the basis and at is the configuration - this returns a vector of observations, i.e. a row 
 in our design matrix.
 """
 function design_matrix(cfgs::Vector{Dat},basis::JuLIP.MLIPs.IPSuperBasis{JuLIP.MLIPs.IPBasis})
+    # initialize matrix of correct size
+    Φ = Matrix{Float64}(undef, length(cfgs), length(basis))
+    # for ACE potential, evaluate basis functions for each config/atoms object
+    for (count,i) in enumerate(cfgs)
+        Φ[count,:] = energy(basis, i.at)
+    end
+    return Φ
+end
+
+"""
+    design_matrix(cfgs,basis)
+
+Computes N*M design matrix given N atomic configurations (observations) and length(M) basis 
+
+### Arguments
+
+- `cfgs::Vector{Dat}`: atomic configs from database with DFT energies, forces, virials 
+- `basis::RPIBasis`: type specific for ACE potential. Basis functions (only site energies included).
+
+Note that we don't extract individual basis functions, but instead get basis evaluated on specific configuration/atoms object 
+by calling energy(basis,at), with B the basis and at is the configuration - this returns a vector of observations, i.e. a row 
+in our design matrix.
+"""
+function design_matrix(cfgs::Vector{Dat},basis::RPIBasis)
     # initialize matrix of correct size
     Φ = Matrix{Float64}(undef, length(cfgs), length(basis))
     # for ACE potential, evaluate basis functions for each config/atoms object
