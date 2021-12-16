@@ -104,7 +104,7 @@ Compute list of hyperparameters following iterative, implicit updates.
 From some initial guess for α and β, perform some number of iterations, at each point re-evaluating implicit equations for α and β. 
 Follows approach in 'Pattern Recognition and Machine Learning, Bishop, 2006, pg168'.
 """
-function evidence_approximation(Φ,y,init_α,init_β,num_iterations)
+function evidence_approximation(Φ,y,init_α,init_β,num_iterations=300,tol=1e-3)
 
     # calculate eigenvalues to be multiplied by beta
     λ_s = get_λ_s(Φ)
@@ -120,6 +120,9 @@ function evidence_approximation(Φ,y,init_α,init_β,num_iterations)
     # set initial values for alpha and beta
     alpha = init_α
     beta = init_β
+
+    # calculate old posterior mean (for convergence check)
+    mN_old, SN_old, SN_inv_old = posterior(Φ, y, alpha, beta)
 
     for i in 1:num_iterations
         # multiply by beta to get correct eigenvalues
@@ -138,6 +141,16 @@ function evidence_approximation(Φ,y,init_α,init_β,num_iterations)
         # append to lists
         alpha_list[i+1] = alpha
         beta_list[i+1] = beta
+
+        # check for convergence
+        if i != 1 && sum(abs.(mN_old - mN)) < tol
+            # @show i
+            # converged; return alpha and beta lists
+            return alpha_list[1:i+1], beta_list[1:i+1]
+        else
+            # not converged, update old posterior mean and continue
+            mN_old = mN
+        end
         
     end
 
