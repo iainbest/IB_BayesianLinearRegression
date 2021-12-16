@@ -89,7 +89,7 @@ function inv_β(γ,y,mN,Φ)
 end
 
 """
-    evidence_approximation(Φ,y,init_α,init_β,num_iterations) 
+    evidence_approximation(Φ,y,init_α,init_β,num_iterations=300,tol=0.001) 
 
 Compute list of hyperparameters following iterative, implicit updates.
 
@@ -99,7 +99,8 @@ Compute list of hyperparameters following iterative, implicit updates.
 - `y::Vector{Float64}`: 
 - `init_α::Float64`: initial guess for α 
 - `init_β::Float64`: initial guess for β
-- `num_iterations::Float64`: Number of iterations to perform
+- `num_iterations::Int64=300`: number of iterations to perform
+- `tol::Float64=0.001`: tolerance for convergence check
 
 From some initial guess for α and β, perform some number of iterations, at each point re-evaluating implicit equations for α and β. 
 Follows approach in 'Pattern Recognition and Machine Learning, Bishop, 2006, pg168'.
