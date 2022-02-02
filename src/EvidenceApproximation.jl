@@ -72,7 +72,7 @@ Compute value of 1/β, given γ, target vector y, mean of posterior distribution
 ### Arguments
 
 - `γ::Float64`: 
-- `y::Vector{Float64}`
+- `y::Vector{Float64}`: target vector / vector of observations
 - `mN::Vector{Float64}`: mean of posterior distribution. 
 - `Φ::Matrix{Float64}`: design matrix
 
@@ -96,7 +96,7 @@ Compute list of hyperparameters following iterative, implicit updates.
 ### Arguments
 
 - `Φ::Matrix{Float64}`: design matrix
-- `y::Vector{Float64}`: 
+- `y::Vector{Float64}`: target vector / vector of observations
 - `init_α::Float64`: initial guess for α 
 - `init_β::Float64`: initial guess for β
 - `num_iterations::Int64=300`: number of iterations to perform
@@ -161,5 +161,37 @@ function evidence_approximation(Φ,y,init_α,init_β,num_iterations=300,tol=1e-3
 
     return alpha_list,beta_list
 end
+
+"""
+    evidence(Φ,y,α,β,mN,SN_inv) 
+
+Compute the value of the evidence (AKA the log marginal likelihood).
+
+### Arguments
+
+- `Φ::Matrix{Float64}`: design matrix
+- `y::Vector{Float64}`: target vector / vector of observations
+- `α::Float64`: (optimised) α hyperparameter
+- `β::Float64`: (optimised) β hyperparameter
+- `mN`: mean vector of posterior distribution
+- `SN_inv`: inverse of covariance matrix of posterior distribution
+
+ADD MORE INFO HERE - see Bishop pg 167.
+"""
+function evidence(Φ,y,α,β,mN,SN_inv)
+    ### directly evaluate evidence given alpha and beta from evidence approx, with other arguments
+    ### note evidence == log marginal likelihood
+    
+    ### grab size of Φ (NxM matrix)
+    N = size(Φ)[1]
+    M = size(Φ)[2]
+    
+    ### calculate evidence
+    
+    out = (M/2)*log(α) + (N/2)*log(β) - ( (β/2)*(norm(y - Φ*mN))^2 + (α/2)*(transpose(mN)*mN) ) - (1/2)*logdet(SN_inv) - (N/2)*log(2*π)
+    
+    return out
+end
+
 
 # end
