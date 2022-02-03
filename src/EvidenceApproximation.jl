@@ -2,7 +2,7 @@
 
 # using LinearAlgebra
 
-export get_λ_s,γ,α,inv_β,evidence_approximation
+export get_λ_s,γ,α,inv_β,evidence_approximation,evidence
 
 """
     get_λ_s(Φ)
