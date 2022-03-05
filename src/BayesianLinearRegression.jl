@@ -99,12 +99,34 @@ Computes mean and covariance matrix of the posterior distribution.
 - `β::Float64`: hyperparameter for noise precision of data
 
 """
-function posterior(Φ, y, α, β)
+function posterior(Φ::Matrix{Float64}, y::Vector{Float64}, α::Float64, β::Float64)
     S_N_inv = α * I(size(Φ, 2)) + β * Φ' * Φ
     S_N = inv(S_N_inv)
     m_N = β * S_N * Φ' * y
     return m_N, S_N, S_N_inv
 end;
+
+
+"""
+    posterior(Φ, y, α, β)
+
+Computes mean and covariance matrix of the posterior distribution. Different precisions for different weights/coefficients.
+
+### Arguments
+
+- `Φ::Matrix{Float64}`: Design matrix (N*M)
+- `y::Vector{Float64}`: length(N). Target variable (you want to predict?)
+- `α::Vector{Float64}`: hyperparameters for precisions of weights (before we see data, assume weight_i must be around zero with precision α_i)
+- `β::Float64`: hyperparameter for noise precision of data
+
+"""
+function posterior(Φ::Matrix{Float64}, y::Vector{Float64}, α::Vector{Float64}, β::Float64)
+    S_N_inv = diagm(α) + β * Φ' * Φ
+    S_N = inv(S_N_inv)
+    m_N = β * S_N * Φ' * y
+    return m_N, S_N, S_N_inv
+end;
+
 
 
 """
