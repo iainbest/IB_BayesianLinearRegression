@@ -335,7 +335,9 @@ function evidence(Φ::Matrix{Float64},y::Vector{Float64},α::Vector{Float64},β:
     ### directly evaluate evidence given alpha and beta from evidence approx, with other arguments
     ### note evidence == log marginal likelihood
     
-    C = (1/β)*I + (Φ' * inv(diagm(α)) * Φ)
+    ### this fails for large matrices Φ 
+    C = (1/β)*I + (Φ * inv(diagm(α)) * Φ')
+
     @assert size(C)[1] == size(C)[2]
     N = size(C)[1]
     
