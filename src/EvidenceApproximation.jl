@@ -137,7 +137,7 @@ function evidence_approximation(Φ::Matrix{Float64},y::Vector{Float64},init_α::
         # check for convergence in mean vector
         if i != 1 && sum(abs.(mN_old - mN)) < tol
             # @show i
-            println("Converged")
+            # println("Converged")
             # converged; return alpha and beta lists
             return alpha_list[1:i+1], beta_list[1:i+1]
         else
@@ -300,7 +300,7 @@ function evidence_approximation(Φ::Matrix{Float64},y::Vector{Float64},init_α::
         # check for convergence in mean vector
         if i != 1 && sum(abs.(mN_old - mN)) < tol
             # @show i
-            println("Converged")
+            # println("Converged")
             # converged; return alpha and beta lists
             return alpha_list[1:i+1], beta_list[1:i+1]
         else
