@@ -331,7 +331,7 @@ Compute the value of the evidence (AKA the log marginal likelihood). Now have mu
 
 ADD MORE INFO HERE - see Bishop pg 347.
 """
-function evidence(Φ::Matrix{Float64},y::Vector{Float64},α::Vector{Float64},β::Float64)
+function evidence(Φ::Matrix{Float64},y::Vector{Float64},α::Vector{Float64},β::Float64,mN::Vector{Float64},SN_inv::Matrix{Float64})
     ### directly evaluate evidence given alpha and beta from evidence approx, with other arguments
     ### note evidence == log marginal likelihood
     
